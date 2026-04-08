@@ -1,0 +1,325 @@
+/* ---- CSS Variables & Theme ---- */
+:root {
+  --bg-dark: #0d0d0d;
+  --card-bg: rgba(26, 26, 26, 0.4);
+  --card-border: rgba(255, 255, 255, 0.05);
+  
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  
+  /* Soft red / coral accent */
+  --accent-color: #f43f5e; 
+  --accent-glow: rgba(244, 63, 94, 0.4);
+  --accent-hover: #fb7185;
+
+  --border-radius-lg: 24px;
+  --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+
+  --timing-smooth: 0.3s ease;
+  --timing-snappy: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---- Global Styles ---- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: hidden;
+}
+
+/* ---- Layout & Background Effect ---- */
+.dashboard-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.05) 0%, rgba(13, 13, 13, 1) 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- Card Container ---- */
+.timer-card {
+  position: relative;
+  z-index: 1;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-lg);
+  padding: 40px;
+  width: 90%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* Page Load Animation */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 0.8s var(--timing-snappy) forwards;
+}
+
+/* ---- Mode Tabs ---- */
+.mode-tabs {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px;
+  border-radius: 100px;
+  margin-bottom: 40px;
+}
+
+.mode-tabs label {
+  cursor: pointer;
+  position: relative;
+}
+
+.mode-tabs input[type="radio"] {
+  display: none;
+}
+
+.tab {
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: 100px;
+  transition: color var(--timing-smooth);
+  position: relative;
+  z-index: 2;
+}
+
+.mode-tabs label:hover .tab {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mode-tabs input[type="radio"]:checked + .tab {
+  color: var(--text-main);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform var(--timing-smooth), box-shadow var(--timing-smooth);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.mode-tabs input[type="radio"]:checked + .tab::after {
+  transform: scaleX(1);
+}
+
+/* ---- Timer Display ---- */
+.timer-display {
+  margin-bottom: 48px;
+  transition: transform var(--timing-smooth);
+  cursor: default;
+}
+
+.timer-display:hover {
+  transform: scale(1.05);
+}
+
+.timer-display h1 {
+  font-size: 100px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.1);
+  /* Pulse breathing animation */
+  animation: pulseBreathe 4s ease-in-out infinite;
+}
+
+/* ---- Controls ---- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 32px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--timing-smooth);
+}
+
+.btn:active {
+  transform: scale(0.95) !important; /* Forces active state visually */
+}
+
+/* Primary Start Button */
+.btn-primary {
+  background: var(--accent-color);
+  color: #fff;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+/* Secondary Pause Button */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.05);
+}
+
+/* Icon Button (Reset) */
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+}
+
+.btn-icon:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+  transform: scale(1.1) rotate(-15deg);
+}
+
+/* ---- Task Input ---- */
+.task-input-container {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.task-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 0;
+  color: var(--text-main);
+  font-size: 16px;
+  font-family: inherit;
+  text-align: center;
+  transition: all var(--timing-smooth);
+}
+
+.task-input:focus {
+  outline: none;
+  border-bottom-color: var(--accent-color);
+  box-shadow: 0 10px 10px -10px var(--accent-glow);
+  color: #fff;
+}
+
+.task-input::placeholder {
+  color: var(--text-muted);
+  transition: opacity var(--timing-smooth);
+}
+
+.task-input:focus::placeholder {
+  opacity: 0.3;
+}
+
+/* ---- Session Info ---- */
+.session-info {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeSlideUp 0.6s 0.4s var(--timing-snappy) forwards;
+}
+
+.session-info p {
+  font-size: 14px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ---- Keyframes ---- */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseBreathe {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(244, 63, 94, 0.15);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(244, 63, 94, 0.5);
+  }
+}
+
+/* ---- Responsiveness ---- */
+@media (max-width: 480px) {
+  .timer-card {
+    padding: 32px 20px;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .timer-display h1 {
+    font-size: 80px;
+  }
+  
+  .btn {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .mode-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+    background: transparent;
+  }
+  
+  .tab {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
